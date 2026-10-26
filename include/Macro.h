@@ -338,7 +338,7 @@
 
 # ifdef EXACT_COOLING_GENERAL
 #  define TCOOLG              ( PASSIVE_NEXT_IDX3 )
-#  define PASSIVE_NEXT_IDX4   ( TCOOLG - 1         )
+#  define PASSIVE_NEXT_IDX4   ( TCOOLG - 1        )
 # else
 #  define PASSIVE_NEXT_IDX4   ( PASSIVE_NEXT_IDX3 )
 # endif

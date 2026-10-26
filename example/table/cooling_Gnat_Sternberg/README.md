@@ -1,3 +1,3 @@
 Gnat & Sternberg cooling function for CIE
-Download from: http://wise-obs.tau.ac.il/~orlyg/cooling/CIEcool/
-
+Downloaded from: http://wise-obs.tau.ac.il/~orlyg/cooling/CIEcool/
+Please copy cooling_Gnat_Sternberg_table.txt to your simulation directory.

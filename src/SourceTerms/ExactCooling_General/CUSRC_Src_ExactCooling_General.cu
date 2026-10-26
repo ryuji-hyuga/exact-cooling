@@ -193,7 +193,7 @@ static void Src_ExactCooling_General( real fluid[], const real B[],
 
 #  ifdef __CUDACC__
    const double *TEF_Temp   = SrcTerms->ECG_TEF_Temp_DevPtr;         // temperature points (K)
-   const double *TEF_lambda = SrcTerms->ECG_TEF_lambda_DevPtr;       // cooling efficiency (erg cm^3 / s)
+   const double *TEF_lambda = SrcTerms->ECG_TEF_lambda_DevPtr;       // cooling efficiency 
    const double *TEF_alpha  = SrcTerms->ECG_TEF_alpha_DevPtr;        // power law slope
    const double *TEF_Y      = SrcTerms->ECG_TEF_Y_DevPtr;            // exact cooling integration constant
 #  else
@@ -208,12 +208,12 @@ static void Src_ExactCooling_General( real fluid[], const real B[],
    // (2) calculate parameters
    // ==========================
    // mass density
-   const double rho  = fluid[DENS];           // g cm^-3                  
+   const double rho  = fluid[DENS];                            
 
    // number densities
-   const double n_H  = rho / (mu_H * mp);     // cm^-3       
-   const double n_e  = rho / (mu_e * mp);     // cm^-3                   
-   const double n    = rho / (mu   * mp);     // cm^-3                  
+   const double n_H  = rho / (mu_H * mp);          
+   const double n_e  = rho / (mu_e * mp);                        
+   const double n    = rho / (mu   * mp);                     
 
 // please change the length of Yks to your N value
    double Tnow, Tnew, Tk, Eint, Eintf, Emag, Pres, lambdaTnow, Y_T, Y, tcool;
@@ -264,7 +264,7 @@ static void Src_ExactCooling_General( real fluid[], const real B[],
       
       // power law cooling function: lambdak * ( Tnow / Tk ) ^ ( alphak )
       Tk            = TEF_Temp[k-1];                                                // K
-      lambdaTnow    = TEF_lambda[k-1] * pow( Tnow / Tk, TEF_alpha[k-1] );           // erg cm^3 s^-1
+      lambdaTnow    = TEF_lambda[k-1] * pow( Tnow / Tk, TEF_alpha[k-1] );        
 
       // compute the current cooling time and store it to the field TCOOLG
       tcool         = n * kB * Tnow / ( (gamma - 1.0) * n_e * n_H * lambdaTnow );
@@ -336,9 +336,9 @@ double TEF_PiecewisePowerLaw( const double Temp, const int k, const double TEF_T
    const double TEF_TN = AuxArray_Flt[9];
    const double TEF_LN = TEF_lambda[TEF_N-1];
 
-   const double Tk = TEF_Temp[k-1];
-   const double Lk = TEF_lambda[k-1];
-   const double ak = TEF_alpha[k-1];
+   const double Tk     = TEF_Temp[k-1];
+   const double Lk     = TEF_lambda[k-1];
+   const double ak     = TEF_alpha[k-1];
 
    double TEF;
 
@@ -615,9 +615,9 @@ void Src_Init_ExactCooling_General()
 #  endif
 
    if ( OPT__INIT == INIT_BY_RESTART )
-      for (int i=0; i<NLEVEL; i++)   SrcTerms.ECG_TCoolGInit[i] = true;
+      for (int i=0; i<NLEVEL; i++)    SrcTerms.ECG_TCoolGInit[i] = true;   
    else
-      for (int i=0; i<NLEVEL; i++)   SrcTerms.ECG_TCoolGInit[i] = false;
+      for (int i=0; i<NLEVEL; i++)    SrcTerms.ECG_TCoolGInit[i] = false;
 
    if ( SrcTerms.ECG_TEF_N != 201 )
       Aux_Error( ERROR_INFO, "SRC_ECG_TEF_N must be 201 for this table !!\n" );
@@ -704,7 +704,9 @@ void Src_Init_ExactCooling_General()
 // Note        :  1. Invoked by Src_Init_ExactCooling_General()
 //                2. The cooling efficiency table is interpolated from the Gnat & Sternberg (2007) table for CIE
 //
-// Parameter   :  Z : Metallicity, 1.0 mean solar metallicity
+// Parameter   :  Z         : Metallicity, 1.0 mean solar metallicity
+//                TEF_Temp  : Store temperature points
+//                TEF_lambda: Store cooling efficiency table at metallicity Z
 //
 // Return      :  TEF_Temp  : Temperature points
 //                TEF_lambda: Cooling efficiency
@@ -736,7 +738,7 @@ void Cooling_efficiency_table( const double Z, double TEF_Temp[], double TEF_lam
 
       double LambdaByZ[5];
       for (int m=0; m<5; m++)
-         LambdaByZ[m] = CoolingEfficiencyTable[(m+1)*Nrow + i];
+         LambdaByZ[m] = CoolingEfficiencyTable[(m+1)*Nrow + i] / ( UNIT_E * pow( UNIT_L, 3 ) / UNIT_T );
 
       if ( Z == ZTable[4] )
          TEF_lambda[i] = LambdaByZ[4];
@@ -771,8 +773,54 @@ void Src_End_ExactCooling_General()
 {
 
 
+// free the memory of the h_SrcEC_* arrays
+   delete [] h_SrcECG_TEF_Temp;       h_SrcECG_TEF_Temp   = NULL;
+   delete [] h_SrcECG_TEF_lambda;     h_SrcECG_TEF_lambda = NULL;
+   delete [] h_SrcECG_TEF_alpha;      h_SrcECG_TEF_alpha  = NULL;
+   delete [] h_SrcECG_TEF_Y;          h_SrcECG_TEF_Y      = NULL;
+
+   SrcTerms.ECG_TEF_Temp_DevPtr   = NULL;
+   SrcTerms.ECG_TEF_lambda_DevPtr = NULL;
+   SrcTerms.ECG_TEF_alpha_DevPtr  = NULL;
+   SrcTerms.ECG_TEF_Y_DevPtr      = NULL;
+
+#  ifdef GPU
+   CUAPI_MemFree_ExactCooling_General();
+#  endif
+
 } // FUNCTION : Src_End_ExactCooling_General
 
 #endif // #ifndef __CUDACC__
+
+
+#ifdef __CUDACC__
+//-------------------------------------------------------------------------------------------------------
+// Function    :  CUAPI_MemFree_ExactCooling_General
+// Description :  Free the GPU memory of the General ExactCooling arrays
+//
+// Note        :  1. Invoked by Src_End_ExactCooling_General()
+//
+// Parameter   :  None
+//
+// Return      :  None
+//-------------------------------------------------------------------------------------------------------
+void CUAPI_MemFree_ExactCooling_General()
+{
+   
+   if ( d_SrcECG_TEF_Temp   != NULL ) {  CUDA_CHECK_ERROR(  cudaFree( d_SrcECG_TEF_Temp   )  );  d_SrcECG_TEF_Temp   = NULL;  }
+   if ( d_SrcECG_TEF_lambda != NULL ) {  CUDA_CHECK_ERROR(  cudaFree( d_SrcECG_TEF_lambda )  );  d_SrcECG_TEF_lambda = NULL;  }
+   if ( d_SrcECG_TEF_alpha  != NULL ) {  CUDA_CHECK_ERROR(  cudaFree( d_SrcECG_TEF_alpha  )  );  d_SrcECG_TEF_alpha  = NULL;  }
+   if ( d_SrcECG_TEF_Y      != NULL ) {  CUDA_CHECK_ERROR(  cudaFree( d_SrcECG_TEF_Y      )  );  d_SrcECG_TEF_Y      = NULL;  }
+   
+   SrcTerms.ECG_TEF_Temp_DevPtr   = NULL;
+   SrcTerms.ECG_TEF_lambda_DevPtr = NULL;
+   SrcTerms.ECG_TEF_alpha_DevPtr  = NULL;
+   SrcTerms.ECG_TEF_Y_DevPtr      = NULL;
+
+} // FUNCTION : CUAPI_MemFree_ExactCooling_General
+#endif // #ifdef __CUDACC__
+
+
+
 
 #endif // #ifdef EXACT_COOLING_GENERAL
