@@ -17,11 +17,6 @@ void Src_WorkBeforeMajorFunc_ExactCooling_General( const int lv, const double Ti
                                                    double AuxArray_Flt[], int AuxArray_Int[] );
 #endif
 
-#ifdef EXACT_COOLING_TEST
-void Src_WorkBeforeMajorFunc_ExactCooling_Test( const int lv, const double TimeNew, const double TimeOld, const double dt,
-                                                double AuxArray_Flt[], int AuxArray_Int[] );
-#endif
-
 // this function pointer can be set by a test problem initializer for a user-specified source term
 void (*Src_WorkBeforeMajorFunc_User_Ptr)    ( const int lv, const double TimeNew, const double TimeOld, const double dt,
                                               double AuxArray_Flt[], int AuxArray_Int[] ) = NULL;
@@ -71,14 +66,7 @@ void Src_WorkBeforeMajorFunc( const int lv, const double TimeNew, const double T
                                                        Src_ECG_AuxArray_Flt, Src_ECG_AuxArray_Int );
 #  endif
 
-#  ifdef EXACT_COOLING_TEST
-// (4) exact cooling test
-   if ( SrcTerms.ExactCooling_Test )
-      Src_WorkBeforeMajorFunc_ExactCooling_Test   ( lv, TimeNew, TimeOld, dt,
-                                                   Src_ECT_AuxArray_Flt, Src_ECT_AuxArray_Int );
-#  endif
-
-// (5) user-specified source term
+// (4) user-specified source term
 // --> users may not define Src_WorkBeforeMajorFunc_User_Ptr
    if ( SrcTerms.User  &&  Src_WorkBeforeMajorFunc_User_Ptr != NULL )
       Src_WorkBeforeMajorFunc_User_Ptr       ( lv, TimeNew, TimeOld, dt,

@@ -128,14 +128,7 @@ void CPU_SrcSolver_IterateAllCells(
                                   SrcTerms.ECG_AuxArrayDevPtr_Flt, SrcTerms.ECG_AuxArrayDevPtr_Int );
 #        endif
 
-#        ifdef EXACT_COOLING_TEST
-//       (4) exact cooling test
-         if ( SrcTerms.ExactCooling_Test )
-            SrcTerms.ECT_FuncPtr( fluid, B, &SrcTerms, dt, dh, x, y, z, TimeNew, TimeOld, MinDens, MinPres, MinEint, PassiveFloor, &EoS,
-                                  SrcTerms.ECT_AuxArrayDevPtr_Flt, SrcTerms.ECT_AuxArrayDevPtr_Int );
-#        endif
-
-//       (5) user-defined
+//       (4) user-defined
          if ( SrcTerms.User )
             SrcTerms.User_FuncPtr( fluid, B, &SrcTerms, dt, dh, x, y, z, TimeNew, TimeOld, MinDens, MinPres, MinEint, PassiveFloor, &EoS,
                                    SrcTerms.User_AuxArrayDevPtr_Flt, SrcTerms.User_AuxArrayDevPtr_Int );

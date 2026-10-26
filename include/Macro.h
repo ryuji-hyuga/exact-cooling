@@ -993,11 +993,6 @@
 #else
 #  define SRC_NAUX_ECG           0
 #endif
-#ifdef EXACT_COOLING_TEST
-#  define SRC_NAUX_ECT           20    // SrcTerms.ECT_AuxArray_Flt/Int[]
-#else
-#  define SRC_NAUX_ECT           0
-#endif
 #  define SRC_NAUX_USER          10    // SrcTerms.User_AuxArray_Flt/Int[]
 
 

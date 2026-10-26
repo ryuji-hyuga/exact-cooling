@@ -178,7 +178,6 @@ struct Makefile_t
    int BarotropicEoS;
    int ExactCooling;
    int ExactCooling_General;
-   int ExactCooling_Test;
 
 #  elif ( MODEL == ELBDM )
    int ELBDMScheme;
@@ -716,11 +715,6 @@ struct InputPara_t
    int    Src_ECG_TEF_N;
    double Src_ECG_dtCoef;
    double Src_ECG_Z;
-#  endif
-
-   int    Src_ExactCooling_Test;
-#  ifdef EXACT_COOLING_TEST
-   double Src_ECT_dtCoef;
 #  endif
 
 // Grackle

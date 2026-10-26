@@ -2,7 +2,6 @@
 
 extern double Mis_GetTimeStep_ExactCooling( const int lv, const double dTime_dt );
 extern double Mis_GetTimeStep_ExactCooling_General( const int lv, const double dTime_dt );
-extern double Mis_GetTimeStep_ExactCooling_Test( const int lv, const double dTime_dt );
 
 //-------------------------------------------------------------------------------------------------------
 // Function    :  Mis_GetTimeStep
@@ -268,16 +267,6 @@ double Mis_GetTimeStep( const int lv, const double dTime_SyncFaLv, const double 
    {
       dTime[NdTime] = dTime_dt * Mis_GetTimeStep_ExactCooling_General( lv, dTime_dt );
       sprintf( dTime_Name[NdTime++], "%s", "ExactCooling_General" );
-   }
-#  endif
-
-// 1.13 CRITERION THIRTEEN : test exact-cooling source term
-// =============================================================================================================
-#  ifdef EXACT_COOLING_TEST
-   if ( SrcTerms.ExactCooling_Test  &&  SrcTerms.ECT_dtCoef >= 0.0 )
-   {
-      dTime[NdTime] = dTime_dt * Mis_GetTimeStep_ExactCooling_Test( lv, dTime_dt );
-      sprintf( dTime_Name[NdTime++], "%s", "ExactCooling_Test" );
    }
 #  endif
 

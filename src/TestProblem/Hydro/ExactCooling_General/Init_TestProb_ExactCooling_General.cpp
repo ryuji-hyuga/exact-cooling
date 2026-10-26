@@ -102,7 +102,7 @@ void LoadInputTestProb( const LoadParaMode_t load_mode, ReadPara_t *ReadPara, HD
 // ************************************************************************************************************************
 // LOAD_PARA( load_mode, "KEY_IN_THE_FILE",   &VARIABLE,              DEFAULT,       MIN,              MAX               );
 // ************************************************************************************************************************
-   LOAD_PARA( load_mode, "EC_Temp",           &EC_Temp,               10000000.0,    Eps_double,       NoMax_double      );
+   LOAD_PARA( load_mode, "EC_Temp",           &EC_Temp,               100000000.0,   Eps_double,       NoMax_double      );
    LOAD_PARA( load_mode, "EC_Dens",           &EC_Dens,               1.0,           Eps_double,       NoMax_double      );
 
 } // FUNCITON : LoadInputTestProb
@@ -153,7 +153,7 @@ void SetParameter()
 // (3) reset other general-purpose parameters
 //     --> a helper macro PRINT_WARNING is defined in TestProb.h
    const long   End_Step_Default = __INT_MAX__;
-   const double End_T_Default   = 8.0*Const_Myr/UNIT_T;
+   const double End_T_Default   = 122.0*Const_Myr/UNIT_T;
 
    if ( END_STEP < 0 ) {
       END_STEP = End_Step_Default;
