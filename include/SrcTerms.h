@@ -44,7 +44,7 @@ typedef void (*SrcFunc_t)( real fluid[], const real B[],
 //                EC_dtCoef                 : Safety factor of the cooling time-step
 //                EC_TCoolInit              : Flag for checking whether the fluid[TCOOL] field has been initialized
 //                ECG_dtCoef                : Safety factor of the cooling time-step
-//                ECG_TCoolInit             : Flag for checking whether the fluid[TCOOLG] field has been initialized
+//                ECG_TCoolInit             : Flag for checking whether the fluid[TCOOL] field has been initialized
 //
 // Method      :  None --> It seems that CUDA does not support functions in a struct
 //-------------------------------------------------------------------------------------------------------
@@ -117,7 +117,7 @@ struct SrcTerms_t
    double   *ECG_TEF_alpha_DevPtr;
    double   *ECG_TEF_Y_DevPtr;
    double    ECG_dtCoef;
-   bool      ECG_TCoolGInit[NLEVEL];
+   bool      ECG_TCoolInit[NLEVEL];
 #  endif
 
 // user-specified source term

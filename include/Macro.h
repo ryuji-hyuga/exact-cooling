@@ -205,21 +205,14 @@
 # endif
 
 // exact cooling source term
-# ifdef EXACT_COOLING
+#if defined(EXACT_COOLING) || defined(EXACT_COOLING_GENERAL)
 #  define NCOMP_PASSIVE_BUILTIN2    1
 # else
 #  define NCOMP_PASSIVE_BUILTIN2    0
 # endif
 
-// general exact cooling source term
-# ifdef EXACT_COOLING_GENERAL
-#  define NCOMP_PASSIVE_BUILTIN3    1
-# else
-#  define NCOMP_PASSIVE_BUILTIN3    0
-# endif
-
 // total number of built-in scalars
-#  define NCOMP_PASSIVE_BUILTIN     ( NCOMP_PASSIVE_BUILTIN0 + NCOMP_PASSIVE_BUILTIN1 + NCOMP_PASSIVE_BUILTIN2 + NCOMP_PASSIVE_BUILTIN3 )
+#  define NCOMP_PASSIVE_BUILTIN     ( NCOMP_PASSIVE_BUILTIN0 + NCOMP_PASSIVE_BUILTIN1 + NCOMP_PASSIVE_BUILTIN2 )
 
 #endif // #if ( MODEL == HYDRO )
 
@@ -329,18 +322,11 @@
 #  define PASSIVE_NEXT_IDX2   ( PASSIVE_NEXT_IDX1 )
 # endif
 
-# ifdef EXACT_COOLING
+#if defined(EXACT_COOLING) || defined(EXACT_COOLING_GENERAL)
 #  define TCOOL               ( PASSIVE_NEXT_IDX2 )
 #  define PASSIVE_NEXT_IDX3   ( TCOOL - 1         )
 # else
 #  define PASSIVE_NEXT_IDX3   ( PASSIVE_NEXT_IDX2 )
-# endif
-
-# ifdef EXACT_COOLING_GENERAL
-#  define TCOOLG              ( PASSIVE_NEXT_IDX3 )
-#  define PASSIVE_NEXT_IDX4   ( TCOOLG - 1        )
-# else
-#  define PASSIVE_NEXT_IDX4   ( PASSIVE_NEXT_IDX3 )
 # endif
 
 #endif // #if ( NCOMP_PASSIVE > 0 )
@@ -379,18 +365,11 @@
 #  define FLUX_NEXT_IDX2   ( FLUX_NEXT_IDX1  )
 # endif
 
-# ifdef EXACT_COOLING
+#if defined(EXACT_COOLING) || defined(EXACT_COOLING_GENERAL)
 #  define FLUX_TCOOL       ( FLUX_NEXT_IDX2  )
 #  define FLUX_NEXT_IDX3   ( FLUX_TCOOL - 1  )
 # else
 #  define FLUX_NEXT_IDX3   ( FLUX_NEXT_IDX2  )
-# endif
-
-# ifdef EXACT_COOLING_GENERAL
-#  define FLUX_TCOOLG      ( FLUX_NEXT_IDX3  )
-#  define FLUX_NEXT_IDX4   ( FLUX_TCOOLG - 1 )
-# else
-#  define FLUX_NEXT_IDX4   ( FLUX_NEXT_IDX3  )
 # endif
 
 #endif // #if ( NCOMP_PASSIVE > 0 )
@@ -415,12 +394,8 @@
 #  define _CRAY               ( 1L << CRAY )
 # endif
 
-# ifdef EXACT_COOLING
+#if defined(EXACT_COOLING) || defined(EXACT_COOLING_GENERAL)
 #  define _TCOOL              ( 1L << TCOOL )
-# endif
-
-# ifdef EXACT_COOLING_GENERAL
-#  define _TCOOLG             ( 1L << TCOOLG )
 # endif
 
 #endif // #if ( NCOMP_PASSIVE > 0 )
@@ -452,12 +427,8 @@
 #  define _FLUX_CRAY          ( 1L << FLUX_CRAY )
 # endif
 
-# ifdef EXACT_COOLING
+#if defined(EXACT_COOLING) || defined(EXACT_COOLING_GENERAL)
 #  define _FLUX_TCOOL         ( 1L << FLUX_TCOOL )
-# endif
-
-# ifdef EXACT_COOLING_GENERAL
-#  define _FLUX_TCOOLG        ( 1L << FLUX_TCOOLG )
 # endif
 
 #endif // #if ( NFLUX_PASSIVE > 0 )

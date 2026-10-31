@@ -62,10 +62,10 @@ double Mis_GetTimeStep_ExactCooling_General( const int lv, const double dTime_dt
 
             real tcool_Code = NULL_REAL;
 
-            if ( SrcTerms.ECG_TCoolGInit[lv] ) {
+            if ( SrcTerms.ECG_TCoolInit[lv] ) {
 //             use the stored cooling time
-#              ifdef TCOOLG
-               tcool_Code = amr->patch[ amr->FluSg[lv] ][lv][PID]->fluid[TCOOLG][k][j][i];
+#              ifdef TCOOL
+               tcool_Code = amr->patch[ amr->FluSg[lv] ][lv][PID]->fluid[TCOOL][k][j][i];
 #              endif
             }
 
@@ -93,10 +93,10 @@ double Mis_GetTimeStep_ExactCooling_General( const int lv, const double dTime_dt
                SrcTerms.ECG_CPUPtr( fluid, B, &SrcTerms, 0.0, NULL_REAL, x, y, z, NULL_REAL, NULL_REAL,
                                     MIN_DENS, MIN_PRES, MIN_EINT, PassiveFloorMask, NULL,
                                     Src_ECG_AuxArray_Flt, Src_ECG_AuxArray_Int );
-#              ifdef TCOOLG
-               tcool_Code = fluid[TCOOLG];
+#              ifdef TCOOL
+               tcool_Code = fluid[TCOOL];
 #              endif
-            } // if ( SrcTerms.ECG_TCoolGInit[lv] ) ... else ...
+            } // if ( SrcTerms.ECG_TCoolInit[lv] ) ... else ...
 
 //          compare the cooling time and store the minimum value
             OMP_dt_ECG[TID] = fmin( OMP_dt_ECG[TID], (double)tcool_Code );

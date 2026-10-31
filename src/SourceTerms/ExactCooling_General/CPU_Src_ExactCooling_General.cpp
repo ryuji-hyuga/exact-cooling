@@ -266,9 +266,9 @@ static void Src_ExactCooling_General( real fluid[], const real B[],
       Tk            = TEF_Temp[k-1];                                                // K
       lambdaTnow    = TEF_lambda[k-1] * pow( Tnow / Tk, TEF_alpha[k-1] );        
 
-      // compute the current cooling time and store it to the field TCOOLG
+      // compute the current cooling time and store it to the field TCOOL
       tcool         = n * kB * Tnow / ( (gamma - 1.0) * n_e * n_H * lambdaTnow );
-      fluid[TCOOLG] = tcool;
+      fluid[TCOOL]  = tcool;
 
       // do NOT update the internal energy if dt = 0
       if ( dt == 0.0 )   return;
@@ -292,7 +292,7 @@ static void Src_ExactCooling_General( real fluid[], const real B[],
 #     endif
       
       fluid[ENGY]   = NAN;
-      fluid[TCOOLG] = NAN;
+      fluid[TCOOL]  = NAN;
       return;
    }
 
@@ -615,9 +615,9 @@ void Src_Init_ExactCooling_General()
 #  endif
 
    if ( OPT__INIT == INIT_BY_RESTART )
-      for (int i=0; i<NLEVEL; i++)    SrcTerms.ECG_TCoolGInit[i] = true;   
+      for (int i=0; i<NLEVEL; i++)    SrcTerms.ECG_TCoolInit[i] = true;   
    else
-      for (int i=0; i<NLEVEL; i++)    SrcTerms.ECG_TCoolGInit[i] = false;
+      for (int i=0; i<NLEVEL; i++)    SrcTerms.ECG_TCoolInit[i] = false;
 
    if ( SrcTerms.ECG_TEF_N != 201 )
       Aux_Error( ERROR_INFO, "SRC_ECG_TEF_N must be 201 for this table !!\n" );

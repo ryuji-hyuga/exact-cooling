@@ -300,8 +300,8 @@ void Output_ExactCooling_General()
                                              EoS_DensEint2Temp_CPUPtr, EoS_GuessHTilde_CPUPtr, EoS_HTilde2Temp_CPUPtr,
                                              EoS_AuxArray_Flt, EoS_AuxArray_Int, h_EoS_Table );
                                      
-#     ifdef TCOOLG
-      Tcool_nume += fluid[TCOOLG]*UNIT_T/Const_Myr;
+#     ifdef TCOOL
+      Tcool_nume += fluid[TCOOL]*UNIT_T/Const_Myr;
 #     endif
 
       Temp_nume   += Temp_nume_tmp;

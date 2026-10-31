@@ -45,7 +45,7 @@ void Src_AdvanceDt( const int lv, const double TimeNew, const double TimeOld, co
 #  endif
 
 #  ifdef EXACT_COOLING_GENERAL
-   if ( SrcTerms.ExactCooling_General )   SrcTerms.ECG_TCoolGInit[lv] = true;
+   if ( SrcTerms.ExactCooling_General )   SrcTerms.ECG_TCoolInit[lv] = true;
 #  endif
 
 } // FUNCTION : Src_AdvanceDt

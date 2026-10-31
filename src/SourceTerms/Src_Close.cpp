@@ -59,10 +59,10 @@ void Src_Close( const int lv, const int SaveSg_Flu, const real h_Flu_Array_S_Out
             for (int j=0; j<PS1; j++)
             for (int i=0; i<PS1; i++)
             {
-               const real TCoolG = amr->patch[SaveSg_Flu][lv][PID]->fluid[TCOOLG][k][j][i];
+               const real TCool = amr->patch[SaveSg_Flu][lv][PID]->fluid[TCOOL][k][j][i];
 
-               if ( !Aux_IsFinite( TCoolG )  ||  TCoolG <= (real)0.0 )
-                  Aux_Error( ERROR_INFO, "Unphysical cooling time %14.7e (lv=%d, PID=%d, (i,j,k)=(%d,%d,%d)) !!\n", TCoolG, lv, PID, i, j, k );
+               if ( !Aux_IsFinite( TCool )  ||  TCool <= (real)0.0 )
+                  Aux_Error( ERROR_INFO, "Unphysical cooling time %14.7e (lv=%d, PID=%d, (i,j,k)=(%d,%d,%d)) !!\n", TCool, lv, PID, i, j, k );
             }
          } // if ( SrcTerms.ExactCooling_General )
 #        endif
